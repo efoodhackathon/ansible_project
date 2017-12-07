@@ -1,0 +1,42 @@
+---
+- name: Install Apache2
+  become: yes
+  apt: name={{item}} update_cache=yes
+  with_items:
+    - apache2
+    - ssl-cert
+    - libapache2-mod-jk
+  changed_when: False
+
+- name: Activate modules
+  shell: "a2enmod {{ item }}"
+  args:
+    creates: /etc/apache2/mods-enabled/{{ item }}.load
+  become: yes
+  notify:
+    - restart apache2
+  with_items:
+    - jk
+    - ssl
+    - alias
+    - rewrite
+    - remoteip
+    - headers
+
+- name: "debug my_value"
+  debug: 
+    msg: "Hello real hackatho {{ my_value }}"
+
+- name: "debug my_value"
+  debug: 
+    var: my_list
+   #msg: "{{ my_list }}"
+
+- name: "debug my_value"
+  debug: 
+    msg: "Hello real hackatho {{ my_dict.foo.bar }}"    
+
+- name: "Replace the index.html"
+  become: yes
+  template: src=templates/index.html.j2 dest=/var/www/html/index.html
+  

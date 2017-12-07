@@ -1,0 +1,13 @@
+---
+# file: group_vars/all
+
+my_value: "this is my value"
+
+my_list:
+  - "1st value in list"
+  - "2st value in list"
+
+my_dict:
+  foo:
+    bar: "baz"
+    abc: "def"

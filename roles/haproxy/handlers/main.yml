@@ -1,0 +1,10 @@
+---
+- name: reload haproxy
+  become: yes
+  service: name=haproxy state=reloaded
+
+- name: stop haproxy 
+  become: yes
+  service: 
+    name: haproxy 
+    state: stopped

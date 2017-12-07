@@ -1,0 +1,9 @@
+---
+- name: loadbalancers playbook
+  hosts: loadbalancers
+  tasks: 
+    - name: "debug here"
+      debug: 
+        msg: "Hello real hackathon"
+  roles:
+    - haproxy

@@ -1,0 +1,41 @@
+---
+- name: Install add-apt-repository
+  become: yes
+  apt: name=software-properties-common state=latest
+
+- name: Add HAProxy repository for 1.6
+  become: yes
+  apt_repository: repo='ppa:vbernat/haproxy-1.6'
+
+- name: Install HA Proxy 
+  become: yes
+  apt: 
+    pkg: haproxy
+    update_cache: yes
+    state: present
+
+# edit some files with ansible
+- name: Enable init script
+  become: true
+  replace: dest='/etc/default/haproxy' 
+         regexp='ENABLED=0'
+         replace='ENABLED=1'
+
+# transfer files 
+- name: Upload ssl keys
+  copy: src=files/{{ item }} dest=/etc/haproxy/certs/
+  become: yes
+  with_items:
+    - "server.crt"
+    - "server.csr"
+    - "server.key"
+    - "server.pem"
+  notify: reload haproxy
+
+- name: Configure haproxy
+  become: true
+  template: src=templates/haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+  vars:
+    test: "my dummy value!!"
+    test_again: "my dummy value Again!!"    
+  notify: reload haproxy

@@ -1,0 +1,9 @@
+---
+- name: webservers playbook
+  hosts: webservers
+  tasks: 
+    - name: "debug here"
+      debug: 
+        msg: "Hello real hackathon"
+  roles:
+    - apache
